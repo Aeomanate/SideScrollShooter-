@@ -1,0 +1,1 @@
+A side scroll shooter as one more attempt to write a game from scratch  
