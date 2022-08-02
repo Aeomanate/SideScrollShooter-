@@ -7,7 +7,7 @@
 
 #include "Bases.hpp"
 
-class GameObject: public sf::Drawable, public Updatable {
+class GameObject: public SceneObject {
   SET_EVENT_DISPATCHERS(
       DISPATCHER(hitpointsChanged);
   )

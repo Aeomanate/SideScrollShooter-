@@ -20,11 +20,13 @@ Game& Game::Get() {
 
 Game::Game(std::string const& gameName, sf::VideoMode screen_size)
 : window(screen_size, gameName)
-, player({screen_size.width/2.0f, screen_size.height+0.0f})
 {
-    EnemyController* c = new EnemyController();
-    enemyController.reset(c);
-    controllers.push_back(enemyController.get());
+    enemyController = std::make_shared<EnemyController>();
+    player = std::make_shared<Player>(sf::Vector2f{screen_size.width/2.0f, screen_size.height+0.0f});
+    sceneObjects.insert(enemyController.get());
+    sceneObjects.insert(player.get());
+    
+    player->GetDispatchers().death.Subscribe(this, &Game::HandleEndGame);
 }
 
 sf::Vector2u Game::GetWindowSize() {
@@ -34,19 +36,16 @@ sf::Vector2u Game::GetWindowSize() {
 
 void Game::GameLoop() {
     while(window.isOpen()) {
-        // check all the window's events that were triggered since the lastCheck iteration of the loop
         HandleInput();
         UpdateGame();
         DrawGame();
-        HandleEndGame();
-        
     }
 }
 void Game::HandleKeyPressed(sf::Event event) {
     switch(event.key.code) {
         case sf::Keyboard::Key::Up:
             std::cout << "Up pressed!\n";
-            player.Jump();
+            player->Jump();
             break;
         case sf::Keyboard::Key::Down:
             std::cout << "Down pressed!\n";
@@ -77,25 +76,20 @@ void Game::HandleInput() {
 
 void Game::DrawGame() {
     window.clear({128, 128, 128});
-    window.draw(player);
-    for(Controller* controller: controllers) {
-        window.draw(*controller);
+    for(SceneObject* sceneObject: sceneObjects) {
+        window.draw(*sceneObject);
     }
     window.display();
 }
 void Game::UpdateGame() {
-    player.Update();
-    for(Controller* controller: controllers) {
-        controller->Update();
+    for(SceneObject* sceneObject: sceneObjects) {
+        sceneObject->Update();
     }
     
 }
 
-bool Game::CheckEndGame() {
-    return enemyController->HandleIntersect(&player);
-}
 void Game::HandleEndGame() {
-    if(!CheckEndGame()) return;
+    
     window.close();
 }
 

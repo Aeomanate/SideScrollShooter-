@@ -8,7 +8,7 @@
 #include "PCH.hpp"
 #include "GameObject.hpp"
 
-class Controller: public sf::Drawable, public Updatable {
+class Controller: public SceneObject {
   public:
     void Update() override;
     

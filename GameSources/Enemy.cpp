@@ -9,7 +9,7 @@
 #include "Game.hpp"
 
 Enemy::Enemy(sf::Vector2f pos, int direction)
-: GameObject("../Resources/Textures/enemy.png", pos)
+: GameObject("../Resources/Textures/enemy.png", pos, 1)
 , moveVelocity(5)
 , direction(direction)
 , moveTimer(5ms)

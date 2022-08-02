@@ -16,7 +16,7 @@ Player::Player(sf::Vector2f pos)
     , jumpDuration(400ms)
     , timer(jumpDuration / int(maxJumpHeight / jumpVelocity))
 {
-    GameObject::GetDispatchers().hitpointsChanged.Subscribe();
+    GameObject::GetDispatchers().hitpointsChanged.Subscribe(this, &Player::HandleHitpointsChanged);
 }
 
 void Player::Update() {
@@ -48,6 +48,9 @@ void Player::Jump() {
     isJumping = true;
     timer.reset();
 }
-void Player::HandleHitpointsChanged() {
 
+void Player::HandleHitpointsChanged() {
+    if(hitpoints <= 0) {
+        GetDispatchers().death.EmitEvent();
+    }
 }

@@ -16,6 +16,10 @@ class Updatable {
     virtual void Update() = 0;
 };
 
+class SceneObject: public sf::Drawable, public Updatable {
+
+};
+
 
 
 

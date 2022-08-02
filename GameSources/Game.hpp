@@ -33,8 +33,6 @@ class Game {
     
     void UpdateGame();
     
-    bool CheckEndGame();
-    
     void HandleEndGame();
     
   private:
@@ -44,10 +42,10 @@ class Game {
     inline static std::unique_ptr<Game> game = nullptr;
     
     sf::RenderWindow window;
-    Player player;
+    std::shared_ptr<Player> player;
     
     std::shared_ptr<EnemyController> enemyController;
-    std::vector<Controller*> controllers;
+    std::set<SceneObject*> sceneObjects;
 };
 
 
