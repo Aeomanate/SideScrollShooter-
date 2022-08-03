@@ -6,6 +6,7 @@
 
 #include "Game.hpp"
 #include "Enemy.hpp"
+#include "EndGameScreen.hpp"
 
 
 Game& Game::Create(std::string const& gameName, sf::VideoMode screen_size) {
@@ -23,8 +24,8 @@ Game::Game(std::string const& gameName, sf::VideoMode screen_size)
 {
     enemyController = std::make_shared<EnemyController>();
     player = std::make_shared<Player>(sf::Vector2f{screen_size.width/2.0f, screen_size.height+0.0f});
-    sceneObjects.insert(enemyController.get());
-    sceneObjects.insert(player.get());
+    sceneObjects.insert(enemyController);
+    sceneObjects.insert(player);
     
     player->GetDispatchers().death.Subscribe(this, &Game::HandleEndGame);
 }
@@ -76,27 +77,21 @@ void Game::HandleInput() {
 
 void Game::DrawGame() {
     window.clear({128, 128, 128});
-    for(SceneObject* sceneObject: sceneObjects) {
+    for(auto sceneObject: sceneObjects) {
         window.draw(*sceneObject);
     }
     window.display();
 }
 void Game::UpdateGame() {
-    for(SceneObject* sceneObject: sceneObjects) {
+    for(auto sceneObject: sceneObjects) {
         sceneObject->Update();
     }
-    
+    enemyController->HandleAllIntersectWith(player.get());
 }
 
 void Game::HandleEndGame() {
-    sf::Font font;
-    if(!font.loadFromFile("../Resources/Catalish Huntera.ttf")) {
-        std::cout << "Font not load\n";
-    }
-    
-    
-    
-    window.close();
+    sceneObjects.insert(std::make_shared<EndGameScreen>());
+    sceneObjects.erase(player);
 }
 
 

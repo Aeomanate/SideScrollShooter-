@@ -49,3 +49,10 @@ void Enemy::CheckOutOfScreenBounds() {
         GetDispatchers().death.EmitEvent(this);
     }
 }
+bool Enemy::HandleIntersectWith(GameObject* collidedObject) {
+    bool isCollided = GameObject::HandleIntersectWith(collidedObject);
+    if(isCollided) {
+        collidedObject->ChangeHitpoints(-1);
+    }
+    return isCollided;
+}

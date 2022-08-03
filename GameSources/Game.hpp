@@ -45,7 +45,7 @@ class Game {
     std::shared_ptr<Player> player;
     
     std::shared_ptr<EnemyController> enemyController;
-    std::set<SceneObject*> sceneObjects;
+    std::set<std::shared_ptr<SceneObject>> sceneObjects;
 };
 
 

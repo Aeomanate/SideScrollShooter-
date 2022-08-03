@@ -6,7 +6,7 @@
 #define TESTGAME_ENEMY_HPP
 
 #include "PCH.hpp"
-#include "Bases.hpp"
+#include "Updatable.hpp"
 #include "GameObject.hpp"
 #include "Timer.hpp"
 
@@ -23,6 +23,8 @@ class Enemy: public GameObject {
     
     void Update() override;
     
+    bool HandleIntersectWith(GameObject* collidedObject) override;
+  
   private:
     void UpdatePos();
     void CheckOutOfScreenBounds();

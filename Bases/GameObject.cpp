@@ -23,13 +23,13 @@ void GameObject::draw(sf::RenderTarget& target, sf::RenderStates states) const {
     target.draw(sprite, states);
 }
 
-bool GameObject::CheckIntersect(GameObject const& other) const {
-    return sprite.getGlobalBounds().intersects(other.sprite.getGlobalBounds());
-}
-void GameObject::HandleIntersectWith(GameObject* other) {
-
-}
 void GameObject::ChangeHitpoints(int delta) {
     hitpoints += delta;
+    HandleHitpointsChanged();
+}
+
+bool GameObject::HandleIntersectWith(GameObject* collidedObject) {
+    bool isCollided = sprite.getGlobalBounds().intersects(collidedObject->sprite.getGlobalBounds());
+    return isCollided;
 }
 

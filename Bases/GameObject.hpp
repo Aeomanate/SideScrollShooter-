@@ -5,7 +5,7 @@
 #ifndef TESTGAME_GAMEOBJECT_HPP
 #define TESTGAME_GAMEOBJECT_HPP
 
-#include "Bases.hpp"
+#include "SceneObject.hpp"
 #include "EventDispatcher.hpp"
 
 class GameObject: public SceneObject {
@@ -18,14 +18,12 @@ class GameObject: public SceneObject {
     virtual ~GameObject() = default;
     
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-  
-    bool CheckIntersect(GameObject const& other) const;
     
-    virtual void ChangeHitpoints(int delta);
+    virtual bool HandleIntersectWith(GameObject* collidedObject);
     
-  public:
-    virtual void HandleIntersectWith(GameObject* other);
+    void ChangeHitpoints(int delta);
     
+    virtual void HandleHitpointsChanged() { };
     
   protected:
     sf::Texture texture;

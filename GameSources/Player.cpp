@@ -50,7 +50,17 @@ void Player::Jump() {
 }
 
 void Player::HandleHitpointsChanged() {
+    std::cout << "Player: Uhg, it's hurts! HP: " + std::to_string(hitpoints) + "\n";
     if(hitpoints <= 0) {
         GetDispatchers().death.EmitEvent();
     }
+}
+bool Player::HandleIntersectWith(GameObject* collidedObject) {
+    bool isCollided = GameObject::HandleIntersectWith(collidedObject);
+    
+    if(isCollided) {
+        GetDispatchers().death.EmitEvent();
+    }
+    
+    return isCollided;
 }

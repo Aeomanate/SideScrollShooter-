@@ -7,25 +7,24 @@
 #include "Controller.hpp"
 void Controller::Update() {
     HandleObjectsToRemove();
-    
-    for(std::shared_ptr<GameObject> const& gameObject: gameObjects) {
+    for(auto const& gameObject: gameObjects) {
         gameObject->Update();
     }
 }
 void Controller::draw(sf::RenderTarget& target, sf::RenderStates states) const {
-    for(std::shared_ptr<GameObject> const& gameUnit: gameObjects) {
+    for(auto const& gameUnit: gameObjects) {
         target.draw(*gameUnit, states);
     }
 }
-bool Controller::HandleIntersect(GameObject* objectToHandle) {
-    for(std::shared_ptr<GameObject> const& gameObject: gameObjects) {
-        if(objectToHandle->CheckIntersect(*gameObject)) {
+
+void Controller::HandleAllIntersectWith(GameObject* objectToHandle) {
+    for(auto const& gameObject: gameObjects) {
+        if(objectToHandle->HandleIntersectWith(gameObject.get())) {
             gameObject->HandleIntersectWith(objectToHandle);
-            return true;
         }
     }
-    return false;
 }
+
 size_t Controller::GetCountObjects() const {
     return gameObjects.size();
 }
@@ -45,7 +44,6 @@ void Controller::HandleObjectsToRemove() {
     while(!objectsToDelete.empty()) {
         GameObject* toDelete = objectsToDelete.front();
         objectsToDelete.pop();
-    
         RemoveGameObject(toDelete);
     }
 }

@@ -6,7 +6,7 @@
 #define TESTGAME_PLAYER_HPP
 
 #include "PCH.hpp"
-#include "Bases.hpp"
+#include "Updatable.hpp"
 #include "GameObject.hpp"
 #include "EventDispatcher.hpp"
 #include "Timer.hpp"
@@ -23,8 +23,10 @@ class Player: public GameObject {
     
     void Update() override;
     
+    bool HandleIntersectWith(GameObject* collidedObject) override;
+  
   private:
-    void HandleHitpointsChanged();
+    void HandleHitpointsChanged() override;
   
   private:
     float curJumpHeight;

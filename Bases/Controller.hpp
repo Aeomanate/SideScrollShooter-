@@ -6,6 +6,7 @@
 #define TESTGAME_CONTROLLER_HPP
 
 #include "PCH.hpp"
+#include "SceneObject.hpp"
 #include "GameObject.hpp"
 
 class Controller: public SceneObject {
@@ -14,7 +15,7 @@ class Controller: public SceneObject {
     
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
     
-    bool HandleIntersect(GameObject* objectToHandle);
+    void HandleAllIntersectWith(GameObject* objectToHandle);
     
     size_t GetCountObjects() const;
     
