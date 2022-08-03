@@ -11,7 +11,7 @@ GameObject::GameObject(std::string name, sf::Vector2f pos, int hitpoints)
 {
     if (!texture.loadFromFile(name))
     {
-        std::cout << "Texture not load";
+        std::cout << "Texture not load\n";
     }
     
     sprite.setTexture(texture);

@@ -14,10 +14,12 @@ sf::Vector2f operator+(sf::Vector2f left, float value);
 class Updatable {
   public:
     virtual void Update() = 0;
+    virtual ~Updatable() = default;
 };
 
 class SceneObject: public sf::Drawable, public Updatable {
-
+  public:
+    virtual ~SceneObject() = default;
 };
 
 

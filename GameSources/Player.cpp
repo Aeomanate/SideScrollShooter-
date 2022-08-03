@@ -46,7 +46,7 @@ void Player::Update() {
 void Player::Jump() {
     if(isJumping || isFallinng) return;
     isJumping = true;
-    timer.reset();
+    timer.Reset();
 }
 
 void Player::HandleHitpointsChanged() {

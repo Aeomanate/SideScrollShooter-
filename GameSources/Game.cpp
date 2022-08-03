@@ -89,6 +89,12 @@ void Game::UpdateGame() {
 }
 
 void Game::HandleEndGame() {
+    sf::Font font;
+    if(!font.loadFromFile("../Resources/Catalish Huntera.ttf")) {
+        std::cout << "Font not load\n";
+    }
+    
+    
     
     window.close();
 }

@@ -11,15 +11,15 @@ Timer::Timer(std::chrono::milliseconds interval)
 {
 
 }
-bool Timer::isIntervalExpired() const {
+bool Timer::IsIntervalExpired() const {
     return now() - lastCheck > interval;
 }
-void Timer::reset() {
+void Timer::Reset() {
     lastCheck = now();
 }
 bool Timer::isExpiredAndReset() {
-    if(isIntervalExpired()) {
-        reset();
+    if(IsIntervalExpired()) {
+        Reset();
         return true;
     }
     return false;

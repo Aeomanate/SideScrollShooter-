@@ -6,6 +6,7 @@
 #define TESTGAME_TIMER_HPP
 
 #include <chrono>
+#include "EventDispatcher.hpp"
 
 using namespace std::chrono_literals;
 
@@ -15,9 +16,9 @@ class Timer {
   public:
     Timer(std::chrono::milliseconds interval);
     
-    bool isIntervalExpired() const;
+    bool IsIntervalExpired() const;
     
-    void reset();
+    void Reset();
     
     bool isExpiredAndReset();
     

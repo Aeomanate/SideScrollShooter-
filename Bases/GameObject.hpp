@@ -6,6 +6,7 @@
 #define TESTGAME_GAMEOBJECT_HPP
 
 #include "Bases.hpp"
+#include "EventDispatcher.hpp"
 
 class GameObject: public SceneObject {
   SET_EVENT_DISPATCHERS(

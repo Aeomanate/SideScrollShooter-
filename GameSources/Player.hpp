@@ -9,6 +9,7 @@
 #include "Bases.hpp"
 #include "GameObject.hpp"
 #include "EventDispatcher.hpp"
+#include "Timer.hpp"
 
 class Player: public GameObject {
   SET_EVENT_DISPATCHERS(
