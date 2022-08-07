@@ -9,7 +9,7 @@
 #include "Enemy.hpp"
 
 EnemyController::EnemyController()
-: maxCountEnemies(3)
+: maxCountEnemies(1)
 , enemySpawnTimer(1s)
 {
 
@@ -29,6 +29,9 @@ void EnemyController::SpawnEnemy() {
 std::shared_ptr<Enemy> EnemyController::CreateEnemy() const {
     int direction= -1 + 2 * RAND(0, 1);
     bool isLeft = direction == -1;
+    
     int xpos = Game::GetWindowSize().x * isLeft + (Enemy::GetWidth()/2 + 1) * direction;
-    return std::make_shared<Enemy>(sf::Vector2f{xpos + 0.f, Game::GetWindowSize().y + 0.f}, direction);
+    sf::Vector2f pos = {xpos + 0.f, Game::GetWindowSize().y + 0.f};
+    
+    return std::make_shared<Enemy>(pos, direction);
 }

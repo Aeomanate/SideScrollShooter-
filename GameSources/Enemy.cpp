@@ -9,7 +9,7 @@
 #include "Game.hpp"
 
 Enemy::Enemy(sf::Vector2f pos, int direction)
-: GameObject("../Resources/Textures/enemy.png", pos)
+: GameObject("enemy", pos, 1)
 , moveVelocity(5)
 , direction(direction)
 , moveTimer(5ms)
@@ -28,24 +28,33 @@ int Enemy::GetWidth() {
 void Enemy::Update() {
     UpdatePos();
     CheckOutOfScreenBounds();
-    
 }
 
 
 void Enemy::UpdatePos() {
     if(!moveTimer.isExpiredAndReset()) return;
     
-    sf::Vector2f pos = sprite.getPosition();
-    sprite.setPosition(pos.x + moveVelocity * direction, pos.y);
+    sf::Vector2f pos = sprite->GetPosition();
+    sprite->SetPosition({pos.x + moveVelocity * direction, pos.y});
 }
 
 void Enemy::CheckOutOfScreenBounds() {
-    unsigned screen_width = Game::Get().GetWindowSize().x;
+    unsigned screen_width = Game::Get()->GetWindowSize().x;
     size_t count = GetDispatchers().death.GetSubscribersCount();
-    float curPos = sprite.getPosition().x;
-    bool isOutFromLeftBorder = sprite.getPosition().x <= -Enemy::GetWidth() / 2;
-    bool isOutFromRightBorder = sprite.getPosition().x >= Game::GetWindowSize().x + Enemy::GetWidth() / 2;
+    float curPos = sprite->GetPosition().x;
+    bool isOutFromLeftBorder = sprite->GetPosition().x <= -Enemy::GetWidth() / 2;
+    bool isOutFromRightBorder = sprite->GetPosition().x >= Game::GetWindowSize().x + Enemy::GetWidth() / 2;
     if(isOutFromLeftBorder || isOutFromRightBorder) {
         GetDispatchers().death.EmitEvent(this);
     }
+}
+
+bool Enemy::HandleIntersectWith(ISceneObject* objectToHandle) {
+    bool isIntersected = GameObject::HandleIntersectWith(objectToHandle);
+    
+    if(isIntersected) {
+        static_cast<GameObject*>(objectToHandle)->ChangeHitpoints(-1);
+    }
+    
+    return isIntersected;
 }

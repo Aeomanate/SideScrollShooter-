@@ -6,15 +6,16 @@
 #define TESTGAME_CONTROLLER_HPP
 
 #include "PCH.hpp"
+#include "Interfaces/ISceneObject.hpp"
 #include "GameObject.hpp"
 
-class Controller: public sf::Drawable, public Updatable {
+class Controller: public ISceneObject {
   public:
     void Update() override;
     
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
     
-    bool HandleIntersect(GameObject* objectToHandle);
+    void HandleAllIntersectsWith(ISceneObject* objectToHandle);
     
     size_t GetCountObjects() const;
     

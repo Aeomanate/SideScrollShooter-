@@ -7,7 +7,7 @@
 #include "Player.hpp"
 
 Player::Player(sf::Vector2f pos)
-    : GameObject("../Resources/Textures/player.png", pos, 10)
+    : GameObject("player", pos, 10)
     , jumpVelocity(3)
     , maxJumpHeight(373)
     , isJumping(false)
@@ -16,7 +16,7 @@ Player::Player(sf::Vector2f pos)
     , jumpDuration(400ms)
     , timer(jumpDuration / int(maxJumpHeight / jumpVelocity))
 {
-    GameObject::GetDispatchers().hitpointsChanged.Subscribe();
+    GameObject::GetDispatchers().hitpointsChanged.Subscribe(this, &Player::HandleHitpointsChanged);
 }
 
 void Player::Update() {
@@ -24,7 +24,7 @@ void Player::Update() {
     
     if(isJumping) {
         if(curJumpHeight <= maxJumpHeight) {
-            sprite.setPosition(sprite.getPosition() - sf::Vector2f { 0, jumpVelocity });
+            sprite->SetPosition(sprite->GetPosition() - sf::Vector2f { 0, jumpVelocity });
             curJumpHeight += jumpVelocity;
         } else {
             isJumping = false;
@@ -34,7 +34,7 @@ void Player::Update() {
     
     if(isFallinng) {
         if(curJumpHeight != 0) {
-            sprite.setPosition(sprite.getPosition() + sf::Vector2f { 0, jumpVelocity });
+            sprite->SetPosition(sprite->GetPosition() + sf::Vector2f { 0, jumpVelocity });
             curJumpHeight -= jumpVelocity;
         } else {
             isFallinng = false;
@@ -48,6 +48,9 @@ void Player::Jump() {
     isJumping = true;
     timer.reset();
 }
-void Player::HandleHitpointsChanged() {
 
+void Player::HandleHitpointsChanged() {
+    if(hitpoints <= 0) {
+        GetDispatchers().death.EmitEvent();
+    }
 }

@@ -30,7 +30,10 @@
 
 
 int main() {
-    Game::Create("Terraria clone", { 1600, 600 }).GameLoop();
+    // TODO: Unsubscribe in descructors
+    
+    
+    Game::Create("Terraria clone", { 1600, 600 })->GameLoop();
     
     return 0;
 }

@@ -9,9 +9,7 @@
 
 #include "PCH.hpp"
 
-sf::Vector2f operator+(sf::Vector2f left, float value);
-
-class Updatable {
+class IUpdatable {
   public:
     virtual void Update() = 0;
 };

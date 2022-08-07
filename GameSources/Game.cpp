@@ -5,48 +5,64 @@
 //
 
 #include "Game.hpp"
-#include "Enemy.hpp"
+#include "ImplSfml/SfmlResourceFactory.hpp"
+#include "ImplSfml/SfmlSprite.hpp"
 
 
-Game& Game::Create(std::string const& gameName, sf::VideoMode screen_size) {
+Game* Game::Create(std::string const& gameName, sf::VideoMode screen_size) {
     if(!game) {
-        game.reset(new Game(gameName, screen_size));
+        Game* gameRawPtr = new Game(gameName, screen_size);
+        game.reset(gameRawPtr);
+        game->Init();
     }
-    return *game;
+    return game.get();
 }
-Game& Game::Get() {
-    return *game;
+
+Game* Game::Get() {
+    if(!game) {
+        std::cout << "Error: game was not created\n";
+    }
+    return game.get();
+}
+
+IResourceFactory* Game::GetResourceFactory() {
+    return Get()->resourceFactory.get();
 }
 
 Game::Game(std::string const& gameName, sf::VideoMode screen_size)
 : window(screen_size, gameName)
-, player({screen_size.width/2.0f, screen_size.height+0.0f})
 {
-    EnemyController* c = new EnemyController();
-    enemyController.reset(c);
-    controllers.push_back(enemyController.get());
+    resourceFactory = std::make_unique<SfmlResourceFactory>();
 }
+
+void Game::Init() {
+    sf::Vector2f playerPos = {window.getSize().x/2.0f, window.getSize().y+0.0f};
+    player = std::make_unique<Player>(playerPos);
+    
+    enemyController = std::make_unique<EnemyController>();
+    
+    sceneObjects.push_back(enemyController.get());
+    sceneObjects.push_back(player.get());
+    
+    player->GetDispatchers().death.Subscribe(this, &Game::HandleEndGame);
+}
+
 
 sf::Vector2u Game::GetWindowSize() {
-    return Get().window.getSize();
+    return Get()->window.getSize();
 }
-
-
 void Game::GameLoop() {
     while(window.isOpen()) {
-        // check all the window's events that were triggered since the lastCheck iteration of the loop
         HandleInput();
         UpdateGame();
         DrawGame();
-        HandleEndGame();
-        
     }
 }
 void Game::HandleKeyPressed(sf::Event event) {
     switch(event.key.code) {
         case sf::Keyboard::Key::Up:
             std::cout << "Up pressed!\n";
-            player.Jump();
+            player->Jump();
             break;
         case sf::Keyboard::Key::Down:
             std::cout << "Down pressed!\n";
@@ -55,6 +71,9 @@ void Game::HandleKeyPressed(sf::Event event) {
             break;
     }
 }
+
+
+
 void Game::HandleInput() {
     sf::Event event { };
     while(window.pollEvent(event)) {
@@ -72,30 +91,24 @@ void Game::HandleInput() {
         }
     }
 }
-
-
-
 void Game::DrawGame() {
-    window.clear({128, 128, 128});
-    window.draw(player);
-    for(Controller* controller: controllers) {
-        window.draw(*controller);
+    window.clear({200, 160, 80});
+    for(auto sceneObject: sceneObjects) {
+        
+        window.draw(*sceneObject);
     }
     window.display();
 }
+
 void Game::UpdateGame() {
-    player.Update();
-    for(Controller* controller: controllers) {
-        controller->Update();
+    enemyController->HandleAllIntersectsWith(player.get());
+    for(auto sceneObject: sceneObjects) {
+        sceneObject->Update();
     }
     
 }
-
-bool Game::CheckEndGame() {
-    return enemyController->HandleIntersect(&player);
-}
 void Game::HandleEndGame() {
-    if(!CheckEndGame()) return;
+    std::cout << "Game ended\n";
     window.close();
 }
 

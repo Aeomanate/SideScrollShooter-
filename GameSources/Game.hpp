@@ -9,14 +9,17 @@
 #include "Player.hpp"
 #include "Controller.hpp"
 #include "EnemyController.hpp"
+#include "Interfaces/IResourceFactory.hpp"
 
 
 class Game {
   public:
     
-    static Game& Create(std::string const& gameName, sf::VideoMode screen_size);
+    static Game* Create(std::string const& gameName, sf::VideoMode screen_size);
     
-    static Game& Get();
+    static Game* Get();
+    
+    static IResourceFactory* GetResourceFactory();
     
     static sf::Vector2u GetWindowSize();
     
@@ -25,6 +28,8 @@ class Game {
     
   
   private:
+    void Init();
+    
     void HandleKeyPressed(sf::Event event);
     
     void HandleInput();
@@ -32,8 +37,6 @@ class Game {
     void DrawGame();
     
     void UpdateGame();
-    
-    bool CheckEndGame();
     
     void HandleEndGame();
     
@@ -44,10 +47,12 @@ class Game {
     inline static std::unique_ptr<Game> game = nullptr;
     
     sf::RenderWindow window;
-    Player player;
+    std::unique_ptr<IResourceFactory> resourceFactory;
     
-    std::shared_ptr<EnemyController> enemyController;
-    std::vector<Controller*> controllers;
+    std::unique_ptr<Player> player;
+    std::unique_ptr<EnemyController> enemyController;
+    
+    std::vector<ISceneObject*> sceneObjects;
 };
 
 

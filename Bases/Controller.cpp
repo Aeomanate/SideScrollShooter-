@@ -13,18 +13,15 @@ void Controller::Update() {
     }
 }
 void Controller::draw(sf::RenderTarget& target, sf::RenderStates states) const {
-    for(std::shared_ptr<GameObject> const& gameUnit: gameObjects) {
-        target.draw(*gameUnit, states);
+    for(auto const& gameObject: gameObjects) {
+        target.draw(*gameObject, states);
     }
 }
-bool Controller::HandleIntersect(GameObject* objectToHandle) {
-    for(std::shared_ptr<GameObject> const& gameObject: gameObjects) {
-        if(objectToHandle->CheckIntersect(*gameObject)) {
-            gameObject->HandleIntersectWith(objectToHandle);
-            return true;
-        }
+
+void Controller::HandleAllIntersectsWith(ISceneObject* objectToHandle) {
+    for(auto const& gameObject: gameObjects) {
+        gameObject->HandleIntersectWith(objectToHandle);
     }
-    return false;
 }
 size_t Controller::GetCountObjects() const {
     return gameObjects.size();

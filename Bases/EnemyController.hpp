@@ -17,7 +17,6 @@ class EnemyController: public Controller {
     
     void SpawnEnemy();
   
-  
   private:
     int maxCountEnemies;
     Timer enemySpawnTimer;

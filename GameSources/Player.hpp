@@ -6,7 +6,7 @@
 #define TESTGAME_PLAYER_HPP
 
 #include "PCH.hpp"
-#include "Bases.hpp"
+#include "Interfaces/IUpdatable.hpp"
 #include "GameObject.hpp"
 #include "EventDispatcher.hpp"
 

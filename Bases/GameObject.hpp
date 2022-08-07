@@ -5,31 +5,26 @@
 #ifndef TESTGAME_GAMEOBJECT_HPP
 #define TESTGAME_GAMEOBJECT_HPP
 
-#include "Bases.hpp"
+#include "Interfaces/IUpdatable.hpp"
+#include "Interfaces/ISceneObject.hpp"
+#include "Interfaces/ISprite.hpp"
 
-class GameObject: public sf::Drawable, public Updatable {
+class GameObject: public ISceneObject {
   SET_EVENT_DISPATCHERS(
       DISPATCHER(hitpointsChanged);
   )
   
   public:
-    GameObject(std::string name, sf::Vector2f pos, int hitpoints);
-    virtual ~GameObject() = default;
+    GameObject(std::string const& textureName, sf::Vector2f pos, int hitpoints);
     
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-  
-    bool CheckIntersect(GameObject const& other) const;
     
     virtual void ChangeHitpoints(int delta);
     
-  public:
-    virtual void HandleIntersectWith(GameObject* other);
-    
+    bool HandleIntersectWith(ISceneObject* objectToHandle) override;
     
   protected:
-    sf::Texture texture;
-    sf::Sprite sprite;
-    
+    std::unique_ptr<ISprite> sprite;
     int hitpoints;
 };
 
