@@ -6,12 +6,11 @@
 #define MAIN_CPP_ITEXTURE_HPP
 
 #include "PCH.hpp"
-#include "IDestructable.hpp"
+#include "ILoadable.hpp"
 #include "Vector2.hpp"
 
-class ITexture: public IDestructable {
+class ITexture: public ILoadable {
   public:
-    virtual void LoadFromFile(std::string const& textureName) = 0;
     virtual Vector2u GetSize() = 0;
 };
 

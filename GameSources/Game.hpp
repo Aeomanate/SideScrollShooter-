@@ -44,15 +44,16 @@ class Game {
     Game(std::string const& gameName, sf::VideoMode screen_size);
     
   private:
+    bool isEndGame = false;
     inline static std::unique_ptr<Game> game = nullptr;
     
     sf::RenderWindow window;
     std::unique_ptr<IResourceFactory> resourceFactory;
     
-    std::unique_ptr<Player> player;
-    std::unique_ptr<EnemyController> enemyController;
+    std::shared_ptr<Player> player;
+    std::shared_ptr<EnemyController> enemyController;
     
-    std::vector<ISceneObject*> sceneObjects;
+    std::vector<std::shared_ptr<ISceneObject>> sceneObjects;
 };
 
 

@@ -6,7 +6,6 @@
 
 #include "Enemy.hpp"
 #include "Game.hpp"
-#include "Game.hpp"
 
 Enemy::Enemy(sf::Vector2f pos, int direction)
 : GameObject("enemy", pos, 1)

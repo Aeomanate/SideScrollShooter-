@@ -15,10 +15,6 @@ class SfmlTexture: public ITexture {
     operator sf::Texture&();
     Vector2u GetSize() override;
     
-    SfmlTexture() = default;
-    SfmlTexture(SfmlTexture const&) = delete;
-    SfmlTexture& operator=(SfmlTexture const&) = delete;
-    
   private:
     sf::Texture texture;
 };

@@ -31,7 +31,10 @@
 
 int main() {
     // TODO: Unsubscribe in descructors
-    
+    // TODO: Replace sf::Transformable with own Transformable interface
+    // TODO: Reuse Controller functional in Game class
+    // TODO: Replace static_cast<Sfml...> with simple function
+    // TODO: Make center style for Text class
     
     Game::Create("Terraria clone", { 1600, 600 })->GameLoop();
     

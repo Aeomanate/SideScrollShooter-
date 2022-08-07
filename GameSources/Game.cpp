@@ -5,8 +5,9 @@
 //
 
 #include "Game.hpp"
-#include "ImplSfml/SfmlResourceFactory.hpp"
-#include "ImplSfml/SfmlSprite.hpp"
+#include "SfmlResourceFactory.hpp"
+#include "SfmlSprite.hpp"
+#include "ScreenEndGame.hpp"
 
 
 Game* Game::Create(std::string const& gameName, sf::VideoMode screen_size) {
@@ -32,17 +33,16 @@ IResourceFactory* Game::GetResourceFactory() {
 Game::Game(std::string const& gameName, sf::VideoMode screen_size)
 : window(screen_size, gameName)
 {
-    resourceFactory = std::make_unique<SfmlResourceFactory>();
+    resourceFactory = std::make_unique<SfmlResourceFactory>("../Resources/");
 }
 
 void Game::Init() {
     sf::Vector2f playerPos = {window.getSize().x/2.0f, window.getSize().y+0.0f};
-    player = std::make_unique<Player>(playerPos);
+    player = std::make_shared<Player>(playerPos);
+    enemyController = std::make_shared<EnemyController>();
     
-    enemyController = std::make_unique<EnemyController>();
-    
-    sceneObjects.push_back(enemyController.get());
-    sceneObjects.push_back(player.get());
+    sceneObjects.push_back(enemyController);
+    sceneObjects.push_back(player);
     
     player->GetDispatchers().death.Subscribe(this, &Game::HandleEndGame);
 }
@@ -101,15 +101,18 @@ void Game::DrawGame() {
 }
 
 void Game::UpdateGame() {
-    enemyController->HandleAllIntersectsWith(player.get());
+    if(!isEndGame) {
+        enemyController->HandleAllIntersectsWith(player.get());
+    }
     for(auto sceneObject: sceneObjects) {
         sceneObject->Update();
     }
     
 }
 void Game::HandleEndGame() {
-    std::cout << "Game ended\n";
-    window.close();
+    auto endGameScreen = std::make_shared<ScreenEndGame>();
+    sceneObjects.push_back(endGameScreen);
+    isEndGame = true;
 }
 
 

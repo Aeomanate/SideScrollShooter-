@@ -13,6 +13,9 @@
 #include <random>
 #include <memory>
 #include <queue>
+#include <tuple>
+#include <variant>
+#include <numeric>
 #include "Timer.hpp"
 #include "EventDispatcher.hpp"
 
